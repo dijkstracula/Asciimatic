@@ -48,42 +48,51 @@ const char *valid_characters;
 FILE *input_file;
 FILE *output_file;
 
-/* Font stuff */
+/* template stuff */
 
-cairo_surface_t *characters[256];
+IplImage **templates;
 
 /* Given the supplied set of valid characters, generate the templates we'll be
  * matching against.
  */
-static void 
+static void
 init_templates(int char_height) {
-    cairo_t *cr;
+    int num_chars = strlen(valid_characters);
 
-    memset(characters, 0, sizeof(characters));
-    int chars = strlen(valid_characters);
+    templates = xmalloc(sizeof(IplImage*) * (num_chars + 1));
+    templates[num_chars] = NULL;
 
-    cairo_text_extents_t te;
-
-    for (int i = 0; i < chars; i++) {
+    for (int i = 0; i < num_chars; i++) {
+        cairo_text_extents_t te;
         char c = valid_characters[i];
         char letter[2] = {c, '\0'};
-        
-        characters[(int)c] = 
+
+        /* TODO: this is a bit wasteful but getting the cairo / Ipl formats to play
+         * nicely otherwise is proving tricky.  Figure this out later if time permits. */
+        cairo_surface_t *surface =
             cairo_image_surface_create(CAIRO_FORMAT_ARGB32, char_height, char_height);
-        cr = cairo_create(characters[(int)c]);
+        cairo_t *cr = cairo_create(surface);
 
         cairo_set_source_rgb (cr, 0, 0, 0);
-        cairo_paint (cr);
+        cairo_paint(cr);
 
         cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
         cairo_set_font_size(cr, (int)(char_height * (4.0/3)));
         cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-        
         cairo_text_extents (cr, letter, &te);
         cairo_move_to(cr, (char_height / 2) - te.x_bearing - te.width / 2,
                           (char_height / 2) - te.y_bearing - te.height / 2);
         cairo_show_text(cr, letter);
+        cairo_surface_flush(surface);
 
+        IplImage *image = cvCreateImageHeader(cvSize(char_height, char_height), IPL_DEPTH_8U, 4);
+        char *data = xmalloc(char_height * char_height * sizeof(uint32_t));
+        memcpy(data, cairo_image_surface_get_data(surface), char_height * char_height * sizeof(uint32_t));
+        cvSetData(image, data, char_height * sizeof(uint32_t));
+
+        templates[i] = image;
+
+        cairo_surface_destroy(surface);
         cairo_destroy(cr);
     }
 }
@@ -102,7 +111,7 @@ detect_edges(IplImage *dst, IplImage *src) {
     return dst;
 }
 
-void 
+void
 asciify(IplImage *edges) {
     int char_height = edges->height / output_rows;
     int char_width = edges->width / output_cols;
@@ -132,12 +141,13 @@ init_asciimatic(const char *filename) {
 
 void
 shutdown_asciimatic(void) {
-    int i;
+    int i, num_chars;
 
-    for (i = 0; i < 256; i++) {
-        if (characters[i] != NULL) {
-            cairo_surface_destroy(characters[i]);
-        }
+    num_chars = strlen(valid_characters);
+    for (i = 0; i < num_chars; i++) {
+        free(templates[i]->imageData);
+        cvReleaseImageHeader(&templates[i]);
     }
+
     cvReleaseImage(&src);
 }
