@@ -23,6 +23,7 @@ Dependencies
 
 * cairo
 * libconfig
+* libpthread
 * opencv
 * qt
 

@@ -77,20 +77,19 @@ static void validate_config(int argc, char **argv) {
     extern long output_rows;
     extern long output_cols;
     
-
-    output_rows = strtol(argv[0], NULL, 10);
-    if (output_rows == 0 || output_rows > 4096) {
-        panic(1, "Bad row count size");
-    }
-    output_cols = strtol(argv[1], NULL, 10);
-    if (output_rows == 0 || output_cols > 1024) {
+    output_cols = strtol(argv[0], NULL, 10);
+    if (output_cols== 0 || output_rows > 1024) {
         panic(1, "Bad column count size");
+    }
+    output_rows = strtol(argv[1], NULL, 10);
+    if (output_cols == 0 || output_cols > 4096) {
+        panic(1, "Bad row count size");
     }
     input_filename = argv[2];
     
 done:
     if (show_usage) {
-        fprintf(stderr, "usage: %s [options] <rows> <columns> <input file>\n", __progname);
+        fprintf(stderr, "usage: %s [options] <columns> <rows> <input file>\n", __progname);
         fprintf(stderr, "    -h: display this message\n");
         fprintf(stderr, "    -o <file>: output ASCII image to file rather than stdout\n");
         fprintf(stderr, "    -v: show version\n");
@@ -128,6 +127,8 @@ int main(int argc, char **argv) {
     init_logging();
     init_asciimatic(input_filename);
     init_gui();
+
+    gui_loop();
 
     shutdown_gui();
     shutdown_asciimatic();

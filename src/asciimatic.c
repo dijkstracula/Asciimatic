@@ -25,6 +25,7 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
+#include "asciimatic.h"
 #include "logging.h"
 #include "main.h"
 #include "utils.h"
@@ -40,8 +41,8 @@ int output_cols;
 /* Edge detection stuff */
 IplImage *src;
 
-static int first_thresh;
-static int second_thresh;
+int first_thresh;
+int second_thresh;
 const char *valid_characters;
 
 FILE *input_file;
@@ -91,10 +92,22 @@ init_templates(int char_height) {
  * allocated memory in the return value.
  */
 IplImage *
-detect_edges(IplImage *src, int first_thresh, int second_thresh) {
-    IplImage *dst = NULL;
+detect_edges(IplImage *dst, IplImage *src) {
+    if (dst != NULL) {
+        cvReleaseImage(&dst);
+    }
+    dst = cvCreateImage(cvGetSize(src), 8, 1 );
+
     cvCanny(src, dst, first_thresh, second_thresh, 3);
     return dst;
+}
+
+void 
+asciify(IplImage *edges) {
+    int char_height = edges->height / output_rows;
+    int char_width = edges->width / output_cols;
+
+    xlog(LOG_INFO, "Characters correspond to %dx%d pixel blocks\n", char_width, char_height);
 }
 
 void
@@ -115,7 +128,6 @@ init_asciimatic(const char *filename) {
     }
 
     init_templates(50);
-
 }
 
 void

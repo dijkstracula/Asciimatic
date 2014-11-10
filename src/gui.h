@@ -5,6 +5,9 @@ void
 init_gui(void);
 
 void
+gui_loop(void);
+
+void
 shutdown_gui(void);
 
 #endif

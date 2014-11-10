@@ -29,23 +29,38 @@
 #include "utils.h"
 
 extern IplImage *src;
+extern int first_thresh;
+extern int second_thresh;
+
+IplImage *dst;
 
 static const char *window_name = "Asciimatic";
 static const char *asciify_btn_name = "Asciify!";
 
 static void
 onAsciifyButtonPress(int state, void *p) {
-
+    /* TODO */
 }
 
 void 
 init_gui() {
     cvNamedWindow(window_name, CV_WINDOW_NORMAL);
+    cvCreateTrackbar("thres1", window_name, &first_thresh, 1000, NULL);
+    cvCreateTrackbar("thres2", window_name, &second_thresh, 1000, NULL);
+    cvCreateButton(asciify_btn_name, onAsciifyButtonPress, (void *)asciify_btn_name, CV_PUSH_BUTTON, 0);
 }
 
 void 
 gui_loop() {
-
+    char c;
+    while ((c = cvWaitKey(100)) != 27) {
+        dst = detect_edges(dst, src);
+        cvShowImage(window_name, src);
+        cvShowImage(window_name, dst);
+    }
+    //TODO: make this nicer than just as we exit the loop
+    asciify(dst);
+    cvReleaseImage(&dst);
 }
 
 void

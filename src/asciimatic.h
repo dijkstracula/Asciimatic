@@ -4,7 +4,8 @@
 #include <opencv/cv.h>
 
 void init_asciimatic(const char *filename);
-IplImage *detect_edges(IplImage *src, int first_thresh, int second_thresh);
+void asciify(IplImage *edges);
+IplImage *detect_edges(IplImage *dst, IplImage *src);
 void shutdown_asciimatic(void);
 
 #endif
