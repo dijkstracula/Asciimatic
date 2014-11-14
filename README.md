@@ -5,6 +5,8 @@ This repository contains a cleaned-up mirror of the SVN repo for Nathan
 Taylor's final project in CPSC 505: Image Understanding, Fall 2009, at the 
 University of British Columbia.
 
+![Alt text](/docs/screenshot1.png)
+
 >Typically, tools to generate ASCII art from raster images, such as aalib or libcaca, quantize the input image to a series of brightness levels, and a printable ASCII character is then assigned to a corresponding subregion of the image, where a "darker" brightness level is assigned a "denser" character, and lighter brightness levels are assigned "sparser" characters. While simple to implement and fast enough for real-time purposes (both mplayer and VLC can display video as ASCII, and Quake has been modified to run in the terminal), it is difficult to see what the image is unless the characters are very small; additionally, ANSI colour information is often needed in order to improve the "shading" of the image.
 >
 >One can observe that more information than simply "brightness" can be encoded in an ASCII character; in particular, certain characters such as slashes, dashes, pipes, and other punctuation marks suggest strong direction. Also, the choice of character itself could suggest fine detail within the image (ie. a '+' when two near-parallel lines intersect, a 'O' for small circular features, etc.) Additionally, large swatches of similar colours look very busy to the eye; therefore, we may only want to register characters for regions of the image that correspond to changes in intensity; in other words, it is fruitful to consider an edge-based approach to ASCII-art generation.
