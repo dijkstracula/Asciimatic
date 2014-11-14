@@ -16,7 +16,10 @@ University of British Columbia.
 Building and installation
 -------------------------
 
-$ make
+`$ make`
+`$ ./asciimatic [flags] <rows> <cols> <ifile>`
+
+Additional configuration parameters may be specified in `./config/asciimatic.cfg`.
 
 Dependencies
 ------------

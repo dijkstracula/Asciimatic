@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <libconfig.h>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
@@ -27,6 +28,9 @@
 #include "logging.h"
 #include "main.h"
 #include "utils.h"
+
+/* Clobal config stuff */
+extern config_t config;
 
 extern IplImage *src;
 extern int first_thresh;
@@ -36,20 +40,22 @@ extern int second_thresh;
 static int lbutton_down = 0; //default to up
 static int dirty = 1; /* Only repaint if there's something to repaint */
 
-
 static const char *window_name = "Asciimatic";
 
-IplImage *dst;
+IplImage *edges;
 
 
 
 static void
 on_trackbar(int val) {
+    (void)val;
     dirty = 1;
 }
 
 static void
 on_mouse(int event, int x, int y, int flags, void *p) {
+    (void)flags;
+    (void)p;
 
     if (event == CV_EVENT_LBUTTONDOWN) {
         lbutton_down = 1;
@@ -68,16 +74,25 @@ on_mouse(int event, int x, int y, int flags, void *p) {
             MAX(x-11, 0), 
             MAX(y-11, 0), 
             11,11);
-    cvSetImageROI(dst, roi);
-    cvSetZero(dst);
-    cvResetImageROI(dst);
+    cvSetImageROI(edges, roi);
+    cvSetZero(edges);
+    cvResetImageROI(edges);
 }
 
 void
 init_gui() {
+    int max_thresh1, max_thresh2;
+
+    if (!config_lookup_int(&config, "max_threshold1", &max_thresh1)) {
+        panic(1, "Missing default maximum threshold1 parameter in config file");
+    }
+    if (!config_lookup_int(&config, "max_threshold2", &max_thresh2)) {
+        panic(1, "Missing default maximum threshold2 parameter in config file");
+    }
+
     cvNamedWindow(window_name, CV_WINDOW_NORMAL);
-    cvCreateTrackbar("thres1", window_name, &first_thresh, 1000, on_trackbar);
-    cvCreateTrackbar("thres2", window_name, &second_thresh, 1000, on_trackbar);
+    cvCreateTrackbar("low_th", window_name, &first_thresh, max_thresh1, on_trackbar);
+    cvCreateTrackbar("high_th", window_name, &second_thresh, max_thresh2, on_trackbar);
     cvSetMouseCallback(window_name, on_mouse, NULL);
 }
 
@@ -87,13 +102,13 @@ gui_loop() {
 
     while ((c = cvWaitKey(50)) != 27) {
         if (dirty) {
-            dst = detect_edges(dst, src);
+            edges = detect_edges(edges, src);
         }
-        cvShowImage(window_name, dst);
+        cvShowImage(window_name, edges);
     }
     //TODO: make this nicer than just as we exit the loop
-    asciify(dst);
-    cvReleaseImage(&dst);
+    asciify(edges);
+    cvReleaseImage(&edges);
 }
 
 void

@@ -33,6 +33,8 @@ bool_t verbose_mode; /* Log LOG_DEBUG messages, bounds checking, etc? */
 
 extern const char *__progname;
 const char *input_filename;
+int output_rows;
+int output_cols;
 
 static void validate_config(int argc, char **argv) {
     char optch;
@@ -74,9 +76,6 @@ static void validate_config(int argc, char **argv) {
         goto done;
     }
 
-    extern long output_rows;
-    extern long output_cols;
-    
     output_cols = strtol(argv[0], NULL, 10);
     if (output_cols== 0 || output_rows > 1024) {
         panic(1, "Bad column count size");
@@ -125,7 +124,7 @@ int main(int argc, char **argv) {
     validate_config(argc, argv);
     
     init_logging();
-    init_asciimatic(input_filename);
+    init_asciimatic(input_filename, output_rows, output_cols);
     init_gui();
 
     gui_loop();

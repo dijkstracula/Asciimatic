@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall
+CFLAGS=-g -Wall -Wextra
 LDFLAGS=-lconfig `pkg-config --libs opencv` `pkg-config --libs cairo`
 SRCDIR=src
 

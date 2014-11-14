@@ -3,7 +3,7 @@
 
 #include <opencv/cv.h>
 
-void init_asciimatic(const char *filename);
+void init_asciimatic(const char *filename, int r, int c);
 void asciify(IplImage *edges);
 IplImage *detect_edges(IplImage *dst, IplImage *src);
 void shutdown_asciimatic(void);
