@@ -3,6 +3,8 @@
 #ifndef __UTILS_H_
 #define __UTILS_H_
 
+#include <unistd.h>
+
 #define stripnl(x) x[strlen(x) - 1] = '\0';
 
 void panic(int, const char *, ...);

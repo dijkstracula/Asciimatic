@@ -1,6 +1,7 @@
 #ifndef __LOGGING_H_
 #define __LOGGING_H_
 
+#include <stdarg.h>
 #include <syslog.h>
 
 #include "main.h"

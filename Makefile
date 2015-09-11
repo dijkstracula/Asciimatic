@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -Wextra
+CFLAGS=-g -Wall -Wextra -std=gnu99
 LDFLAGS=-lconfig `pkg-config --libs opencv` `pkg-config --libs cairo`
 SRCDIR=src
 
@@ -9,11 +9,11 @@ OBJECTS=$(SOURCES:.c=.o)
 TARGET=asciimatic
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(OBJECTS): %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(TARGET)
 	rm $(OBJECTS)
+	rm $(TARGET)
