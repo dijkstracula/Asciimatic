@@ -1,0 +1,57 @@
+Size of character image: 988 x 60
+Characters correspond to 3x5 pixel blocks
+                                                                                                              
+                                                                                                              
+                                               ^^                                                             
+                                    A           V --+-^^A-A^                                                  
+                                 A+A^                     ^                                                   
+                            +^V  V                          ++A ^                                             
+                            +^A                               A-AA^                                           
+                        ^A^^+                                                                                 
+                       +T+                                                                                    
+                     +VV                                                   L-+                                
+                     T                                                       AA                               
+                     X                A  ^Y^o   \                            ++                               
+                    A^            ++^-   AAVA^  ^+^XA^^                       AA+                             
+                 AA^             ^+                 AAAA                        TT                            
+                 AA           A+A+                      +AA^      ^A             +                            
+               VA-           ^Ao                          AAA                    AA                           
+              /V             V                            A+A                     A+^ ^                       
+             AV             A                             +AV                       +^+                       
+             T^             T                              -                                                  
+             |+A           A               ^^--^-^--        /V                                                
+             A+A           VA^--AA^       AA-^^^-^^^A+      A                         A+                      
+               VA         A^A^--^ +X               AA       V                ^^^        A^                    
+                VT         V^      AL                      ^AX               AA        ^V                     
+                AJ        ^L^---A   T   ++-------^-++      ^T+                         T                      
+               AV^     AX^ |AX+X^^VAAA+^V-\A AXXA^+A-L-^--^X^-                         A+^                    
+               ^V+A    TYA V ^XAAA^AA ^AA+ V A+A-A+AA^ -^-^+-+^                        ^A+                    
+                  A-AX T AAT ++   AA^  A-+ A      A^A^     A^A                          TV                    
+                     A+AA^XA      AA       AA               A^^                         A^A                   
+                     ^L  AAV     AJ                          AX      +T +              AA A                   
+                    ^AV   |      / +X    VA                  T^     T^A ^               TAA                   
+                    AX    |     AAVA++^+  ^                 ^T      A+XA^+^            ++AV                   
+                    |     V     V   ^A-^^A^                 AA     AA   AAT           +VT^                    
+                    +A^   T     ++A++X ^+                          A  ^^JA              T                     
+                      X   A    ^V+-^--++A               A+++A^     A^+ A               AV                     
+                     XX   |           +V^             ^AV A      AAAA ^VA             Y+                      
+                     LA   L^   T A++AAAo^A^-       ^ AA^  A      ^T V +A^             V+                      
+                     AL    XA  T --V ^-^^-^YT     ^T   \         A+++-+              ^+                       
+                      A    ^A  A^    +^  ^V A^     V  ^T         ^ A               ^VV                        
+                      V     AA                   VAAoV+         ^TA ^T           +VT                          
+                      A                        + ^V             T   o^           +A+                          
+                      A+       V^   o^         ++A^            ^J   YV           Y^                           
+                       T^           A-^T+^A^V^V^              +V --+V  ^+A    + VV                   ^X       
+                       A^               A^ ^^A^              A^A-        L   A^VV                             
+                        A^                                               YV+^-+                               
+                         AV                                              T^                                   
+                          AAA                                            AA                                   
+                            +V+                                           L                                   
+                              VA-                                         A++                                 
+                               AAA   ^---A^                                 +A                                
+                                +A                                           AA                               
+                              +A^                                             A                               
+----^---^-------^------------A^                                               AA                              
+                          ^V+^                                                 AA^                            
+                     ^+^^^                                                       A+                           
+                   +V+                                                            VA                      ^^^^

@@ -1,0 +1,37 @@
+Size of character image: 988 x 60
+Characters correspond to 4x8 pixel blocks
+                                                          _+         ^            -----             
+                                                          Y+------_X-X-X_o           -              
+                                                       _----A--   A+    A-A                         
+                -------^                        ----^---                  XX                        
+              X-+    ------^              _/--^-A                                          ^-+^J    
+      ^o------o-           -+-- -^--^---+-A                                               AYA       
+     JL--oX-      -A         A                                                --J--  X   ^X         
+     VLA++                  -JX                                                A-o+  Y  A+          
+       A--_                  -|                                                    -^V              
+         -A---                T-X --                                                                
+             -A+Y            -o|+J+\A                                                        _--    
+              |TL            --+_/ J                                                      -A--      
+              -LAA            --A J                                                    _--A+        
+               VYV^-         _TT+ L^X                                                               
+         +A+   -J  L--    --V-+X    V-                                                              
+          -V         ------    X    /                                                               
+           -Xo                      -T                            ^                                 
+                                     Lo                           A-o   A-^^-A-A                    
+                    ^                AA                             Y   |V AX  X^-                  
+              A-+   A^  X-            ^o                            /AX-Lo  -L^A-                   
+                        \             -V                           +X-YX_-A X^TX-                   
+                        |+     _V      _^---V           X+      _--J  VX+      A-                   
+                  o     /     +X            -|          A       +J- _AA      -+V                    
+                       AY    _/              |                   A^--+      +^V                     
+                       +     /              -o                             A^                       
+                       V  _-X+               T     __                                               
+                      /  JXVY                |    A-^                                               
+                     _T  /L-                 Y- -^-o-                                               
+                     /  AXV                 +V--+_VVV                                      J-       
+                   ^V-^+VJ                _XJ    /                                         -^  :--  
+                 -^J   X+                 |J+---^V                                                  
+             ----+   -A+                  -----                                                     
+             V^---_-^+                                                                              
+                                                                                                    
+                                                                                                    

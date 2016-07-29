@@ -1,0 +1,32 @@
+ize of character image: 988 x 60
+Characters correspond to 3x8 pixel blocks
+                                X--------------------AA--^     ^ooA-V           
+ -----                         A-                        +   ooA-+              
+A---------------          -----+-------                    ^- V                 
+             -X       +---- -------+-----------        ---                      
+--------------+A^--+^-+   ---oo---+A A--------+TX----    +-^^                   
+    ^-------------+-   -^-A-----^  V^V      ^-\|    -A^-+   A^o                 
+ -+ X++A            o^A--Ao--------ALV+-------VA o      +-X   -A++              
+-------------- -  oA-/    AAAAA-VA  AAA^ ^--^TT X-      ^XX-\o   AA^        +o-X
+----------^ AJXV+VV+-------o+-o-----XV A--  AAV       ^XXAA  -Ao -A+A +^oA XV V 
+  -----o----^A XVo----------VoAAAoX -AA   A JV       AXAXA-    +V^ +AAooX  L^ -X
+          /-V XVA-------------LV^+o  LL  V-AA-    -XAoVA-        Vo   A^  oo+- ^
+      ^--AV/-A+  ---------^    LV^-X^VAA   TV Y ^oAX-^           -TX   V^  --   
+    +-TX-LoV V       ---^^---^^ -AV\AAAL  AAVA--X-+XAoL    -----o---\   V^      
+-++-+AXX  A+A-J------------A-^A--o-AA-AAAAVJ ^XA-  A-XA---To-+      AA   A      
+-A^-+ A   -X|^T    ---+      +XA -A-X  V--^AAXX^----o----            L   A^     
+A-^  A-^   -^A----+-------  -A---o-+-----   --A----                  T^   A     
+A-+  A        L+         --------+                ++-------------^    T   |     
+  +\o-L       T------^   --+-----o-^               -------------------V   |     
+A-o--VVLA     LA    A-  --------- ^X+A+-X--   o\    -^               A-   |     
+L+A---AA    AV^A  --oA-----     ^^^-+ AAJVAAA^  A^  -^   --^A        A    T --^-
+^+-o -AX    V Ao-----^        ^oXA   AAA+-TT AAAX^X --A -- -AA    AAAX   A^++  ^
+o^o ^-^A-^-o   A A^-         XXA     VV V  | L^ VA^V+    -AV^V-^    V   ^VA   ^V
+--------o-AVX  -A^-        XAX-+^+ -AA A--AA^ V--AXAAL---o^ --o-+A-+-   V/+  +Xo
+-+          -\+  V+     ^oA^+X  -  AXXXV   AA     VAAo ^    - ---TX   ^V A--XVAV
+-             V\^  A^^+Xo-^V       VV o    TA       AVV--o-    ^XV   AV    -V --
+          ----  Vo   +AX-o        AA-      -TA       -XAA    ^AA   ^X+          
+------A-^^+L-------    +--+      ^VV        |T         V+A^-Ao   ^XX            
+     ---- --o V-----AA    +-X--^ /Y  ^--    TA         ^-X-V  ^+^X              
+           -A-                 +-VV-^  +--   TA^----^---   ^o+oT^ -V-^          
+                                    --   --^-VA- -      -^Vooo-^----A-        oA
