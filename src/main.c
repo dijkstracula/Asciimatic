@@ -37,7 +37,7 @@ int output_rows;
 int output_cols;
 
 static void validate_config(int argc, char **argv) {
-    char optch;
+    int optch;
     extern int optind;
     extern char *optarg;
     bool_t show_usage = false;
@@ -48,10 +48,14 @@ static void validate_config(int argc, char **argv) {
     extern FILE *output_file;
     output_file = stdout;
 
-    while ((optch = getopt(argc, argv, "ho:v")) != EOF) {
+    while ((optch = getopt(argc, argv, "dho:v")) != -1) {
         switch (optch) {
+            case 'd':
+                verbose_mode = true;
+                break;
             case 'o':
                 output_file = xfopen(optarg, "w");
+                break;
             case 'v':
                 show_version = true;
                 break;
@@ -77,24 +81,25 @@ static void validate_config(int argc, char **argv) {
     }
 
     output_cols = strtol(argv[0], NULL, 10);
-    if (output_cols== 0 || output_rows > 1024) {
+    if (output_cols == 0 || output_cols > 1024) {
         panic(1, "Bad column count size");
     }
     output_rows = strtol(argv[1], NULL, 10);
-    if (output_cols == 0 || output_cols > 4096) {
+    if (output_rows == 0 || output_rows > 4096) {
         panic(1, "Bad row count size");
     }
     input_filename = argv[2];
-    
+
 done:
     if (show_usage) {
         fprintf(stderr, "usage: %s [options] <columns> <rows> <input file>\n", __progname);
+        fprintf(stderr, "    -d: enable debug logging\n");
         fprintf(stderr, "    -h: display this message\n");
         fprintf(stderr, "    -o <file>: output ASCII image to file rather than stdout\n");
         fprintf(stderr, "    -v: show version\n");
         exit(valid_usage ? 0 : 1);
     }
-    
+
 }
 
 /* Parses the configuration file.  Returns whether the file is present (e.g. whether we are

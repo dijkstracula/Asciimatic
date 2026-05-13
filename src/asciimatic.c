@@ -16,10 +16,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
+#include <limits>
 #include <vector>
 
 #include <cairo.h>
@@ -35,6 +37,8 @@ extern config_t config;
 
 static int output_rows;
 static int output_cols;
+static double search_radius;
+static double shift_penalty_lambda;
 
 cv::Mat src;
 
@@ -90,21 +94,25 @@ init_templates(int char_width, int char_height) {
 }
 
 static char
-char_for_subimage(const cv::Mat &image, const std::vector<cv::Mat> &templates, cv::Mat &scratch) {
+char_for_subimage(const cv::Mat &image, const std::vector<cv::Mat> &templates,
+                  cv::Mat &scratch, const cv::Mat &penalty) {
     int best_match = 0;
-    double global_maxval = -1.0;
+    double global_minval = std::numeric_limits<double>::infinity();
 
     for (size_t i = 0; i < templates.size(); i++) {
         double minval, maxval;
 
         cv::matchTemplate(image, templates[i], scratch, cv::TM_SQDIFF_NORMED);
-        cv::pow(scratch, 3, scratch);
-        cv::normalize(scratch, scratch, 1, 0, cv::NORM_MINMAX);
-
+        if (!penalty.empty()) {
+            scratch += penalty;
+        }
         cv::minMaxLoc(scratch, &minval, &maxval);
 
-        if (maxval > global_maxval) {
-            global_maxval = maxval;
+        /* TM_SQDIFF_NORMED is "lower is better"; the best position over the
+         * search window has the smallest response, and the best template is
+         * the one with the smallest such minimum. */
+        if (minval < global_minval) {
+            global_minval = minval;
             best_match = (int)i;
         }
     }
@@ -121,24 +129,62 @@ asciify(cv::Mat &edges) {
 
     std::vector<cv::Mat> templates = init_templates(char_width, char_height);
 
-    /* scratch sized per matchTemplate output formula. */
-    cv::Mat scratch(char_height + 1, char_width + 1, CV_32FC1);
+    /* Search window allows +/- (search_radius * cell) pixels of shift, with
+     * the template sliding over (2*radius_x+1) x (2*radius_y+1) positions. */
+    int radius_x = (int)std::round(search_radius * char_width);
+    int radius_y = (int)std::round(search_radius * char_height);
+    int win_w = char_width  + 2 * radius_x;
+    int win_h = char_height + 2 * radius_y;
+
+    cv::Mat scratch(2 * radius_y + 1, 2 * radius_x + 1, CV_32FC1);
+    cv::Rect img_rect(0, 0, edges.cols, edges.rows);
+
+    /* Bias the match-score toward near-center alignments.  Without this an
+     * off-center match in one cell can be reached just as cheaply from a
+     * neighbor's search window, so a feature near a cell boundary lights up
+     * two adjacent cells with the same character. */
+    cv::Mat penalty;
+    if (shift_penalty_lambda > 0.0 && (radius_x > 0 || radius_y > 0)) {
+        penalty.create(2 * radius_y + 1, 2 * radius_x + 1, CV_32FC1);
+        for (int dy = 0; dy <= 2 * radius_y; dy++) {
+            for (int dx = 0; dx <= 2 * radius_x; dx++) {
+                double ndx = (double)(dx - radius_x) / char_width;
+                double ndy = (double)(dy - radius_y) / char_height;
+                penalty.at<float>(dy, dx) =
+                    (float)(shift_penalty_lambda * (ndx * ndx + ndy * ndy));
+            }
+        }
+    }
 
     for (int j = 0; j < output_rows; j++) {
         for (int i = 0; i < output_cols; i++) {
-            cv::Rect char_area(i * char_width, j * char_height, char_width, char_height);
-            cv::Mat roi = edges(char_area);
+            /* Window centered on the cell.  Pulling from `edges` directly
+             * (rather than zero-padding a cell-sized ROI) lets the local
+             * search see real neighbor content; we only fall back to zero
+             * padding at the image's true boundary. */
+            int x0 = i * char_width  - radius_x;
+            int y0 = j * char_height - radius_y;
+            cv::Rect win(x0, y0, win_w, win_h);
+            cv::Rect clipped = win & img_rect;
 
             cv::Mat subimage;
-            cv::copyMakeBorder(roi, subimage,
-                               char_height / 2, char_height / 2,
-                               char_width  / 2, char_width  / 2,
-                               cv::BORDER_CONSTANT, cv::Scalar::all(0));
+            if (clipped.size() == win.size()) {
+                subimage = edges(win);
+            } else {
+                subimage = cv::Mat::zeros(win_h, win_w, edges.type());
+                if (clipped.area() > 0) {
+                    cv::Rect dst(clipped.x - x0, clipped.y - y0,
+                                 clipped.width, clipped.height);
+                    edges(clipped).copyTo(subimage(dst));
+                }
+            }
 
-            fprintf(stderr, "%c", char_for_subimage(subimage, templates, scratch));
+            fprintf(output_file, "%c",
+                    char_for_subimage(subimage, templates, scratch, penalty));
         }
-        fprintf(stderr, "\n");
+        fprintf(output_file, "\n");
     }
+    fflush(output_file);
 }
 
 /* Performs Canny edge detection on an input image. */
@@ -165,6 +211,36 @@ init_asciimatic(const char *filename, int r, int c) {
     if (src.empty()) {
         panic(1, "Can't load source image \"%s\"", filename);
     }
+    if (c <= 0 || r <= 0) {
+        panic(1, "Grid dimensions must be positive (got %dx%d)", c, r);
+    }
+
+    int cell_width = 4, cell_height = 8;
+    config_lookup_int(&config, "cell_width", &cell_width);
+    config_lookup_int(&config, "cell_height", &cell_height);
+    if (cell_width <= 0 || cell_height <= 0) {
+        panic(1, "cell_width and cell_height must be positive (got %dx%d)",
+              cell_width, cell_height);
+    }
+
+    search_radius = 0.5;
+    config_lookup_float(&config, "search_radius", &search_radius);
+    if (search_radius < 0.0) {
+        panic(1, "search_radius must be non-negative (got %f)", search_radius);
+    }
+
+    shift_penalty_lambda = 0.0;
+    config_lookup_float(&config, "shift_penalty", &shift_penalty_lambda);
+    if (shift_penalty_lambda < 0.0) {
+        panic(1, "shift_penalty must be non-negative (got %f)", shift_penalty_lambda);
+    }
+
+    int target_w = c * cell_width;
+    int target_h = r * cell_height;
+    int interp = (target_w <= src.cols && target_h <= src.rows)
+                   ? cv::INTER_AREA : cv::INTER_CUBIC;
+    cv::resize(src, src, cv::Size(target_w, target_h), 0, 0, interp);
+
     cv::GaussianBlur(src, src, cv::Size(3, 3), 0, 0);
     output_rows = r;
     output_cols = c;

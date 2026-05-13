@@ -41,7 +41,9 @@ bool_t init_logging() {
     if (initialised)
         return false;
 
-    config_lookup_bool(&config, "syslog", (int *)&syslog_enabled);
+    int syslog_enabled_tmp = 0;
+    config_lookup_bool(&config, "syslog", &syslog_enabled_tmp);
+    syslog_enabled = syslog_enabled_tmp;
 
     const char *log_path = NULL;
     config_lookup_string(&config, "logfile", &log_path);
