@@ -4,6 +4,11 @@
 #define __UTILS_H_
 
 #include <unistd.h>
+#include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define stripnl(x) x[strlen(x) - 1] = '\0';
 
@@ -18,4 +23,9 @@ void *xmalloc(size_t sz);
 FILE *xfopen(const char *path, const char *flags);
 
 ssize_t xgetline(char **lineptr, size_t *n, FILE *stream);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
